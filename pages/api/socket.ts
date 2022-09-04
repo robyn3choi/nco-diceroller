@@ -1,7 +1,5 @@
 import { Server } from "Socket.IO"
 
-let count = 0
-
 export default function SocketHandler(req, res) {
   if (res.socket.server.io) {
     console.log("Socket is already running")
@@ -12,12 +10,19 @@ export default function SocketHandler(req, res) {
 
     io.on("connection", (socket) => {
       console.log("connected")
-      io.emit("rolled", count)
 
-      socket.on("roll", (msg) => {
-        console.log(msg)
-        count += msg
-        io.emit("rolled", count)
+      socket.on("roll", ({ actionDiceCount, dangerDiceCount }) => {
+        const actionDice: number[] = []
+        const dangerDice: number[] = []
+
+        for (let i = 0; i < actionDiceCount; i++) {
+          actionDice.push(Math.floor(Math.random() * 6 + 1))
+        }
+        for (let i = 0; i < dangerDiceCount; i++) {
+          dangerDice.push(Math.floor(Math.random() * 6 + 1))
+        }
+
+        io.emit("rolled", { actionDice, dangerDice })
       })
     })
   }
