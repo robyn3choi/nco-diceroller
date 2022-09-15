@@ -1,8 +1,6 @@
-import { useRouter } from "next/router"
 import { useState } from "react"
 
-export default function Home() {
-  const router = useRouter()
+export default function EnterName({ onSubmit }) {
   const [name, setName] = useState("")
 
   return (
@@ -14,7 +12,7 @@ export default function Home() {
         className="p-4 bg-transparent border-2 border-pink rounded-full text-center placeholder:text-pink placeholder:opacity-60"
       />
       <button
-        onClick={() => router.push({ pathname: "dice", query: { name } })}
+        onClick={() => onSubmit(name)}
         disabled={!name}
         className="bg-pink text-blue hover:bg-lightpink rounded-full p-4 text-3xl disabled:opacity-60 disabled:hover:bg-pink"
       >
