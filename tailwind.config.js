@@ -12,7 +12,7 @@ module.exports = {
         lightpink: "#ff7aaf",
         red: "#fe0060",
         coral: "#fe6675",
-        green: "#00ff0d",
+        green: "#00ff99",
       },
     },
   },

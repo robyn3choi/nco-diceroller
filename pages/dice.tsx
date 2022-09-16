@@ -2,10 +2,9 @@ import io from "socket.io-client"
 import { useEffect, useState } from "react"
 import DiceNumberSelect from "../components/DiceNumberSelect"
 import Die from "../components/Die"
-import EnterName from "../components/EnterName"
-import { Router, useRouter } from "next/router"
+import { useRouter } from "next/router"
 
-let socket
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL!)
 
 type RollResult = {
   actionDice: number[]
@@ -20,15 +19,13 @@ export default function Home() {
   const router = useRouter()
   const [players, setPlayers] = useState<any[]>([])
   const [actionDiceCount, setActionDiceCount] = useState(1)
-  const [dangerDiceCount, setDangerDiceCount] = useState(1)
+  const [dangerDiceCount, setDangerDiceCount] = useState(0)
   const [rollResult, setRollResult] = useState<RollResult>()
   const [last3RollResults, setLast3RollResults] = useState<RollResult[]>([])
 
   useEffect(() => {
     async function initSocket() {
-      await fetch("/api/socket")
-      socket = io()
-
+      console.log("init")
       socket.on("connect", () => {
         console.log("joining")
         socket.emit("playerJoined", router.query.name)
@@ -88,6 +85,11 @@ export default function Home() {
     }
   }, [router.query.name])
 
+  function reset() {
+    setDangerDiceCount(0)
+    setActionDiceCount(1)
+  }
+
   function roll() {
     socket.emit("roll", { actionDiceCount, dangerDiceCount })
   }
@@ -95,24 +97,27 @@ export default function Home() {
   return (
     <div className="text-center p-8">
       <h1 className="text-4xl mb-4">Neon City Overdrive</h1>
-      <div className="absolute top-8 text-lg text-lightblue">
+      <div className="absolute top-8 text-lg text-green">
         {players.map((p, i) => (
           <div key={p.id}>{p.name}</div>
         ))}
       </div>
       <div className="flex gap-8 justify-center items-center mt-10 mb-6">
         <DiceNumberSelect label="Action dice" value={actionDiceCount} isGood onChange={setActionDiceCount} />
-        <button
-          onClick={roll}
-          className="border-2 border-pink hover:border-white hover:text-white rounded-full w-32 h-32 text-3xl"
-        >
-          Roll
+        <button onClick={reset} className="border-2 border-pink hover:border-white hover:text-white p-3 text-lg">
+          Reset
         </button>
         <DiceNumberSelect label="Danger dice" value={dangerDiceCount} isGood={false} onChange={setDangerDiceCount} />
       </div>
+      <button
+        onClick={roll}
+        className="border-2 border-pink hover:border-white hover:text-white rounded-full text-2xl h-28 w-28"
+      >
+        Roll
+      </button>
       {rollResult && (
-        <div className="text-2xl mt-10 mb-4">
-          <span className="text-lightblue">{rollResult.playerName} </span>rolled:
+        <div className="text-2xl mt-6 mb-4">
+          <span className="text-green">{rollResult.playerName} </span>rolled:
         </div>
       )}
       <div className="flex gap-2 justify-center">

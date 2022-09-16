@@ -12,7 +12,7 @@ export default function DiceNumberSelect({ label, value, isGood, onChange }) {
   }
 
   return (
-    <div className="text-2xl">
+    <div className="text-2xl w-[198px]">
       <label htmlFor={label}>{label}</label>
       <div className="flex items-center justify-center">
         <button onClick={decrement} className="text-3xl p-4 hover:text-white">
