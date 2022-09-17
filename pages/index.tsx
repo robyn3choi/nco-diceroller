@@ -11,7 +11,7 @@ export default function Home() {
       <input
         placeholder="Enter your name"
         onChange={(e) => setName(e.target.value)}
-        className="p-4 bg-transparent border-2 border-pink rounded-full text-center placeholder:text-pink placeholder:opacity-60"
+        className="text-green p-4 bg-transparent border-2 border-pink rounded-full text-center placeholder:text-pink placeholder:opacity-60"
       />
       <button
         onClick={() => router.push({ pathname: "dice", query: { name } })}
