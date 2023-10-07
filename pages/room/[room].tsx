@@ -1,10 +1,11 @@
-import io from "socket.io-client"
+import { io } from "socket.io-client"
 import { useEffect, useState } from "react"
-import DiceNumberSelect from "../components/DiceNumberSelect"
-import Die from "../components/Die"
+import DiceNumberSelect from "../../components/DiceNumberSelect"
+import Die from "../../components/Die"
 import { useRouter } from "next/router"
+import Lobby from "../../components/Lobby"
 
-const socket = io(process.env.NEXT_PUBLIC_SERVER_URL!)
+const socket = io(process.env.NEXT_PUBLIC_SERVER_URL!, { autoConnect: false })
 
 type RollResult = {
   actionDice: number[]
@@ -17,26 +18,31 @@ type RollResult = {
 
 export default function Home() {
   const router = useRouter()
-  const [players, setPlayers] = useState<any[]>([])
+  const [players, setPlayers] = useState<string[]>([])
   const [actionDiceCount, setActionDiceCount] = useState(1)
   const [dangerDiceCount, setDangerDiceCount] = useState(0)
   const [rollResult, setRollResult] = useState<RollResult>()
-  const [last3RollResults, setLast3RollResults] = useState<RollResult[]>([])
+  // const [last3RollResults, setLast3RollResults] = useState<RollResult[]>([])
+
+  const { room, playerName } = router.query
 
   useEffect(() => {
     async function initSocket() {
-      console.log("init")
+      console.log("init", socket)
+
+      socket.connect()
+
       socket.on("connect", () => {
         console.log("joining")
-        socket.emit("playerJoined", router.query.name)
+        socket.emit("playerJoined", { playerName, room })
       })
 
       socket.on("playersUpdated", (updatedPlayers) => {
-        console.log(updatedPlayers)
+        console.log("updatedPlayers ", updatedPlayers)
         setPlayers(updatedPlayers)
       })
 
-      socket.on("rolled", ({ actionDice, dangerDice, name }) => {
+      socket.on("rolled", ({ actionDice, dangerDice, playerName }) => {
         const actionDiceCopy = [...actionDice]
         const dangerDiceCopy = [...dangerDice]
 
@@ -64,26 +70,28 @@ export default function Home() {
             text = "Botched!"
           }
         }
-        const result = { actionDice, dangerDice, num, text, id: Date.now(), playerName: name }
+        const result = { actionDice, dangerDice, num, text, id: Date.now(), playerName }
         setRollResult(result)
-        setLast3RollResults((prevState) => {
-          const newArray = [result, ...prevState]
-          if (newArray.length > 3) {
-            newArray.pop()
-          }
-          return newArray
-        })
+        // setLast3RollResults((prevState) => {
+        //   const newArray = [result, ...prevState]
+        //   if (newArray.length > 3) {
+        //     newArray.pop()
+        //   }
+        //   return newArray
+        // })
       })
     }
-    if (router.query.name) {
+    if (playerName) {
       initSocket()
     }
     return () => {
       if (socket) {
-        socket.emit("playerLeft", router.query.name)
+        socket.emit("playerLeft", playerName)
       }
     }
-  }, [router.query.name])
+  }, [playerName, room])
+
+  if (!playerName) return <Lobby />
 
   function reset() {
     setDangerDiceCount(0)
@@ -91,15 +99,15 @@ export default function Home() {
   }
 
   function roll() {
-    socket.emit("roll", { actionDiceCount, dangerDiceCount })
+    socket.emit("roll", { room, playerName, actionDiceCount, dangerDiceCount })
   }
 
   return (
     <div className="text-center p-8">
       <h1 className="text-4xl mb-4">Neon City Overdrive</h1>
       <div className="absolute top-8 text-lg text-green">
-        {players.map((p, i) => (
-          <div key={p.id}>{p.name}</div>
+        {players.map((player) => (
+          <div key={player}>{player}</div>
         ))}
       </div>
       <div className="flex gap-8 justify-center items-center mt-10 mb-6">
