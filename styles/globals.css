@@ -13,7 +13,7 @@ html {
 
 body {
   font-family: "good times", sans-serif;
-  @apply relative h-fit pb-24 sm:pb-16 min-h-[100vh] bg-gradient-to-b from-darkblue to-blue text-pink;
+  @apply relative h-fit pb-24 sm:pb-16 min-h-[100vh] bg-gradient-to-b from-darkblue via-blue to-purple text-pink;
 }
 
 input[type="number"]::-webkit-inner-spin-button,

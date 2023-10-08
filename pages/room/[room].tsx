@@ -106,9 +106,9 @@ export default function Home() {
   return (
     <>
       <div className="text-center p-4 sm:p-8">
-        <h1 className="text-4xl mb-4">Neon City Overdrive</h1>
+        <h1 className="text-4xl mb-4 mt-8">Neon City Overdrive</h1>
         <div className="text-sm font-sans">To invite players to join this room, send them this page’s URL.</div>
-        <div className="absolute top-8 text-lg text-green">
+        <div className="absolute top-4 text-lg text-green">
           {players.map((player) => (
             <div key={player}>{player}</div>
           ))}
