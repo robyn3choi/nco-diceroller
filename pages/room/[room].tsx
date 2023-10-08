@@ -105,23 +105,34 @@ export default function Home() {
 
   return (
     <>
-      <div className="text-center p-8">
+      <div className="text-center p-4 sm:p-8">
         <h1 className="text-4xl mb-4">Neon City Overdrive</h1>
+        <div className="text-sm font-sans">To invite players to join this room, send them this page’s URL.</div>
         <div className="absolute top-8 text-lg text-green">
           {players.map((player) => (
             <div key={player}>{player}</div>
           ))}
         </div>
-        <div className="flex gap-8 justify-center items-center mt-10 mb-6">
+        <div className="hidden sm:flex gap-8 justify-center items-center mt-10 mb-6">
           <DiceNumberSelect label="Action dice" value={actionDiceCount} isGood onChange={setActionDiceCount} />
           <button onClick={reset} className="border-2 border-pink hover:border-white hover:text-white p-3 text-lg">
             Reset
           </button>
           <DiceNumberSelect label="Danger dice" value={dangerDiceCount} isGood={false} onChange={setDangerDiceCount} />
         </div>
+        <div className="flex flex-col sm:hidden gap-4 justify-center items-center mt-10 mb-6">
+          <DiceNumberSelect label="Action dice" value={actionDiceCount} isGood onChange={setActionDiceCount} />
+          <DiceNumberSelect label="Danger dice" value={dangerDiceCount} isGood={false} onChange={setDangerDiceCount} />
+          <button
+            onClick={reset}
+            className="mb-2 border-2 border-pink hover:border-white hover:text-white p-3 sm:text-lg"
+          >
+            Reset
+          </button>
+        </div>
         <button
           onClick={roll}
-          className="border-2 border-pink hover:border-white hover:text-white rounded-full text-2xl h-28 w-28"
+          className="border-2 border-green text-green hover:border-white hover:text-white rounded-full text-2xl h-28 w-28"
         >
           Roll
         </button>

@@ -12,10 +12,10 @@ export default function DiceNumberSelect({ label, value, isGood, onChange }) {
   }
 
   return (
-    <div className="text-2xl w-[198px]">
+    <div className="text-xl sm:text-2xl w-[198px]">
       <label htmlFor={label}>{label}</label>
       <div className="flex items-center justify-center">
-        <button onClick={decrement} className="text-3xl p-4 hover:text-white">
+        <button onClick={decrement} className="w-16 text-3xl p-4 hover:text-white">
           -
         </button>
         <input
@@ -28,7 +28,7 @@ export default function DiceNumberSelect({ label, value, isGood, onChange }) {
           value={value}
           onChange={(e) => onChange(Number(e.target.value) || "")}
         />
-        <button onClick={increment} className="text-3xl p-4 hover:text-white">
+        <button onClick={increment} className="w-16 text-3xl p-4 hover:text-white">
           +
         </button>
       </div>

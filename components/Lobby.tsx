@@ -31,16 +31,19 @@ export default function Lobby() {
 
   return (
     <>
-      <form onSubmit={handleJoin} className="h-screen flex flex-col justify-center items-center text-3xl gap-3">
+      <form
+        onSubmit={handleJoin}
+        className="h-screen p-4 flex flex-col justify-center items-center text-2xl sm:text-3xl gap-3"
+      >
         <input
           placeholder="Enter your name"
           onChange={(e) => setPlayerName(e.target.value)}
-          className="text-green p-4 bg-transparent border-2 border-pink rounded-full text-center placeholder:text-pink placeholder:opacity-60"
+          className="w-full sm:w-auto text-green p-4 bg-transparent border-2 border-pink rounded-full text-center placeholder:text-pink placeholder:opacity-60"
         />
         {error && <div className="text-red text-lg">{error}</div>}
         <button
           disabled={!playerName}
-          className="bg-pink text-blue hover:bg-lightpink rounded-full p-4 text-3xl disabled:opacity-60 disabled:hover:bg-pink"
+          className="w-full sm:w-auto bg-pink text-blue hover:bg-lightpink rounded-full p-4 disabled:opacity-60 disabled:hover:bg-pink"
         >
           Join game
         </button>
