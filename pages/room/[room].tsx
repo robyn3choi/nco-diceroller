@@ -23,7 +23,6 @@ export default function Home() {
   const [actionDiceCount, setActionDiceCount] = useState(1)
   const [dangerDiceCount, setDangerDiceCount] = useState(0)
   const [rollResult, setRollResult] = useState<RollResult>()
-  // const [last3RollResults, setLast3RollResults] = useState<RollResult[]>([])
 
   const { room, playerName } = router.query
 
@@ -39,7 +38,6 @@ export default function Home() {
       })
 
       socket.on("playersUpdated", (updatedPlayers) => {
-        console.log("updatedPlayers ", updatedPlayers)
         setPlayers(updatedPlayers)
       })
 
@@ -73,13 +71,6 @@ export default function Home() {
         }
         const result = { actionDice, dangerDice, num, text, id: Date.now(), playerName }
         setRollResult(result)
-        // setLast3RollResults((prevState) => {
-        //   const newArray = [result, ...prevState]
-        //   if (newArray.length > 3) {
-        //     newArray.pop()
-        //   }
-        //   return newArray
-        // })
       })
     }
     if (playerName) {
