@@ -2,7 +2,8 @@ import clsx from "clsx"
 
 export default function DiceNumberSelect({ label, value, isGood, onChange }) {
   function decrement() {
-    if (value > 1) {
+    const min = isGood ? 1 : 0
+    if (value > min) {
       onChange(value - 1)
     }
   }
